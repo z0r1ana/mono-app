@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>monobank</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="monobank" />
+  <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Monobank_logo.png/512px-Monobank_logo.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ЕКРАН ЗАПУСКУ / FACE ID -->
+  <div id="splash-screen" class="splash-screen" onclick="finishSplash()">
+    <div id="splash-step-1" class="splash-step active">
+      <div class="mono-m-logo">m</div>
+    </div>
+    <div id="splash-step-2" class="splash-step">
+      <div class="faceid-box">
+        <div class="faceid-ring">◎</div>
+        <div class="faceid-label">Face ID</div>
+      </div>
+    </div>
+    <div id="splash-step-3" class="splash-step">
+      <div class="mono-word-logo">monobank</div>
+    </div>
+  </div>
+  <!-- ВКЛАДКА 1: КАРТКИ -->
+  <div id="tab-cards" class="screen active">
+    <div class="header-gradient blue-dark">
+      <div class="top-bar">
+        <div class="avatar-group">
+          <div class="avatar"></div>
+          <div class="chat-badge">◡</div>
+        </div>
+        <div class="top-pills">
+          <div class="pill-item">🎁 <span class="editable" data-key="cashback">0.84 ₴</span></div>
+          <div class="pill-icon promo-anchor">
+            <span>🐱</span>
+            <div class="promo-badge">
+              <span>Black Friday</span>
+              <small>на маркеті</small>
+            </div>
+          </div>
+          <div class="pill-icon">📊</div>
+        </div>
+      </div>
+
+      <div class="balance-main">
+        <span class="plus-btn">+</span>
+        <span class="balance-amount editable" data-key="main_balance">15.36 ₴</span>
+      </div>
+
+      <div class="card-container">
+        <div class="mono-card" onclick="openCardModal()">
+          <div class="card-top">
+            <span class="card-logo">monobank</span>
+          </div>
+          <div class="card-number editable" data-key="card_num">4441 **** **** 8217</div>
+          <div class="card-bottom">
+            <span class="visa-logo">VISA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="all-cards-btn-wrap">
+        <button class="all-cards-btn" onclick="openCardModal()">💳 Усі картки</button>
+      </div>
+
+      <div class="quick-actions">
+        <div class="action-item">
+          <div class="action-circle">▭</div>
+          <span>Переказати<br>на картку</span>
+        </div>
+        <div class="action-item">
+          <div class="action-circle">📄</div>
+          <span>Платіж<br>за IBAN</span>
+        </div>
+        <div class="action-item">
+          <div class="action-circle">❖</div>
+          <span>Інші<br>платежі</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-section">
+      <div class="section-header">
+        <h2>Операції</h2>
+        <button class="btn-all" onclick="openStatement()">Усі ›</button>
+      </div>
+
+      <div class="warning-banner" onclick="openStatement()">
+        <span class="warn-icon">🙀</span>
+        <span class="editable" data-key="risk_banner">3 платежі під ризиком у наступний 1 день</span>
+      </div>
+
+      <div class="tx-list">
+        <div class="tx-item">
+          <div class="tx-icon dark">↓</div>
+          <div class="tx-info">
+            <div class="tx-title editable" data-key="home_nazar_title">Від: Kolosovskiy Nazar</div>
+          </div>
+          <div class="tx-amount positive editable" data-key="home_nazar_sum">500.00 ₴</div>
+        </div>
+
+        <div class="tx-item">
+          <div class="tx-icon cyan">▶</div>
+          <div class="tx-info">
+            <div class="tx-title editable" data-key="tx1_title">Sweet TV</div>
+            <div class="tx-sub error editable" data-key="tx1_sub">⊗ Недостатньо коштів...</div>
+          </div>
+          <div class="tx-amount negative editable" data-key="tx1_sum">-241.00 ₴</div>
+        </div>
+
+        <div class="tx-item">
+          <div class="tx-icon cyan">▶</div>
+          <div class="tx-info">
+            <div class="tx-title editable" data-key="tx2_title">Sweet TV</div>
+            <div class="tx-sub error editable" data-key="tx2_sub">⊗ Недостатньо коштів...</div>
+          </div>
+          <div class="tx-amount negative editable" data-key="tx2_sum">-299.00 ₴</div>
+        </div>
+      </div>
+
+      <div class="extra-pills-row">
+        <div class="extra-pill">⚖️ <span class="editable" data-key="pill_limits">Ліміти та обмеження</span></div>
+        <div class="extra-pill">🌍 <span class="editable" data-key="pill_abroad">Тим, хто за кордоном</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНЕ ВІКНО НАЛАШТУВАНЬ КАРТКИ -->
+  <div id="modal-card" class="sub-screen">
+    <div class="header-gradient blue-dark pb-16">
+      <div class="sub-top-bar">
+        <button class="close-btn" onclick="closeSubScreen('modal-card')">✕</button>
+      </div>
+      <div class="detail-card-box">
+        <div class="card-top">
+          <div>
+            <div class="card-logo">monobank</div>
+            <div class="card-sub-brand">Universal Bank</div>
+          </div>
+          <div class="chip-icon">▭</div>
+        </div>
+        <div class="card-bottom-row">
+          <span class="card-holder editable" data-key="card_holder">ZORIANA LUSHCHAN</span>
+          <span class="visa-logo">VISA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-body">
+      <div class="menu-group">
+        <div class="menu-row">
+          <span class="menu-ico">⚙️</span>
+          <div class="menu-texts">
+            <div class="menu-title">Налаштування оплат</div>
+            <div class="menu-sub">Додаткові перевірки</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group-caption">Чорна картка</div>
+      <div class="menu-group">
+        <div class="menu-row">
+          <span class="menu-ico"></span>
+          <div class="menu-texts">
+            <div class="menu-title">Налаштування Apple Pay</div>
+            <div class="menu-sub">Обрати скін картки — у нас їх багато</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico">🔒</span>
+          <div class="menu-texts">
+            <div class="menu-title">Заблокувати картку</div>
+            <div class="menu-sub">Ви завжди зможете її розблокувати</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico">💳</span>
+          <div class="menu-texts">
+            <div class="menu-title">Змінити кредитний ліміт</div>
+            <div class="menu-sub editable" data-key="credit_limit_info">Поточний ліміт 0 ₴</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico">@</span>
+          <div class="menu-texts">
+            <div class="menu-title">Підписки та сервіси</div>
+            <div class="menu-sub">Керування списаннями з картки</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПОВНА ВИПИСКА ОПЕРАЦІЙ -->
+  <div id="screen-statement" class="sub-screen">
+    <div class="statement-header">
+      <button class="close-btn" onclick="closeSubScreen('screen-statement')">✕</button>
+      <div class="mini-card-info">
+        <div class="mini-card">monobank <span>VISA</span></div>
+        <div class="mini-balance editable" data-key="main_balance">15.36 ₴</div>
+      </div>
+      <div class="header-icons">
+        <span>☆</span>
+        <span>🔍</span>
+      </div>
+    </div>
+
+    <div class="future-payments">
+      <div class="fp-icon">📅</div>
+      <div class="fp-text">
+        <div class="fp-title">Майбутні платежі</div>
+        <div class="fp-sub editable" data-key="risk_banner">3 платежі під ризиком у наступний 1 день</div>
+      </div>
+      <span>⌄</span>
+    </div>
+
+    <div class="statement-body">
+      <div class="date-divider editable" data-key="date_1">Вчора</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_nazar_yesterday_title">Від: Kolosovskiy Nazar</div></div>
+        <div class="tx-amount positive editable" data-key="st_nazar_yesterday_sum">500.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_tx1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_tx1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_tx1_sum">-241.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_tx2_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_tx2_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_tx2_sum">-299.00 ₴</div>
+      </div>
+     
+
+      <div class="date-divider editable" data-key="date_3">23 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_tx7_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_tx7_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_tx7_sum">-241.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_tx8_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_tx8_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_tx8_sum">-299.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_4">22 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx9_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx9_sum">-58.23 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_tx11_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_tx11_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_tx11_sum">-299.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_6">20 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🍣</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx12_title">Osama Sushi</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx12_sum">-653.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx13_title">Від: Holovchytska Olha</div></div>
+        <div class="tx-amount positive editable" data-key="st_tx13_sum">700.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🚌</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx15_title">Автовокзал</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx15_sum">-319.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🧸</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx16_title">Будинок Іграшок</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx16_sum">-2 199.50 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx17_title">Від: Holovchytska Olha</div></div>
+        <div class="tx-amount positive editable" data-key="st_tx17_sum">2 200.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">a</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx18_title">Від: Kolosovskiy Nazar</div></div>
+        <div class="tx-amount positive editable" data-key="st_tx18_sum">500.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_7">18 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">👤</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx19_title">Головчицький Ігор Олександрович</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx19_sum">-7 000.00 ₴</div>
+      </div>
+      <div class="installment-hint">
+        <span class="editable" data-key="st_hint_1">📈 Перевести суму в Розстрочку?</span>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx20_title">Від: Olha Holovchytska</div></div>
+        <div class="tx-amount positive editable" data-key="st_tx20_sum">7 000.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_8">17 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🏦</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx23_title">Ідея банк</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx23_sum">-2500.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">💳</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n17_1_title">535516******0271</div></div>
+        <div class="tx-amount spent editable" data-key="st_n17_1_sum">-2 500.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🏙️</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx22_title">City24</div></div>
+        <div class="tx-amount positive editable" data-key="st_tx22_sum">5 000.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">💳</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n17_3_title">535516******0271</div></div>
+        <div class="tx-amount spent editable" data-key="st_n17_3_sum">-1 000.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n17_4_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n17_4_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n17_4_sum">-299.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n16">16 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">mono</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n16_1_title">Термінал mono</div></div>
+        <div class="tx-amount positive editable" data-key="st_n16_1_sum">1 000.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n16_2_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_n16_2_sum">-204.67 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n16_3_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n16_3_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n16_3_sum">-299.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n15">15 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n15_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n15_1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n15_1_sum">-299.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n13">13 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">👤</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n13_1_title">Головчицька Ольга Василівна</div></div>
+        <div class="tx-amount spent editable" data-key="st_n13_1_sum">-8 000.00 ₴</div>
+      </div>
+      
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n13_3_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n13_3_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n13_3_sum">-241.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n13_5_title">Від: Holovchytska Olha</div></div>
+        <div class="tx-amount positive editable" data-key="st_n13_5_sum">8 000.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n12">12 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n12_1_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_n12_1_sum">-40.93 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n10">10 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n10_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n10_1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n10_1_sum">-241.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n9">9 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n9_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n9_1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n9_1_sum">-241.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n8">8 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n8_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n8_1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n8_1_sum">-241.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n8_2_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_n8_2_sum">-10.23 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_9">7 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🏦</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx23_title">Ідея банк</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx23_sum">-300.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx24_title">Від: Holovchytska Olha</div></div>
+        <div class="tx-amount positive editable" data-key="st_tx24_sum">300.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">m</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_tx25_title">Переказ на картку</div></div>
+        <div class="tx-amount spent editable" data-key="st_tx25_sum">-1 000.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n7_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n7_1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n7_1_sum">-241.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n7_2_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_n7_2_sum">-35.82 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n6">6 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">Є</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n6_1_title">Є Таке!</div></div>
+        <div class="tx-amount spent editable" data-key="st_n6_1_sum">-369.90 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">•••</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n6_2_title">Prostor</div></div>
+        <div class="tx-amount spent editable" data-key="st_n6_2_sum">-597.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n6_3_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n6_3_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n6_3_sum">-241.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🏦</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n6_4_title">Ідея банк</div></div>
+        <div class="tx-amount spent editable" data-key="st_n6_4_sum">-300.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n6_5_title">Від: Holovchytska Olha</div></div>
+        <div class="tx-amount positive editable" data-key="st_n6_5_sum">300.00 ₴</div>
+      </div>
+      
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n6_7_title">Від: Holovchytska Olha</div></div>
+        <div class="tx-amount positive editable" data-key="st_n6_7_sum">1 000.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n5">5 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n5_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n5_1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n5_1_sum">-241.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n4">4 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">💳</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n4_1_title">Olha H.</div></div>
+        <div class="tx-amount spent editable" data-key="st_n4_1_sum">-1 285.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🏦</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n4_2_title">Ідея банк</div></div>
+        <div class="tx-amount spent editable" data-key="st_n4_2_sum">-700.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">💳</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n4_3_title">473121******7832</div></div>
+        <div class="tx-amount spent editable" data-key="st_n4_3_sum">-3000.00 ₴</div>
+      </div>
+      
+    
+      <div class="tx-item">
+        <div class="tx-icon dark">🏙️</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_n4_5_title">City24</div></div>
+        <div class="tx-amount positive editable" data-key="st_n4_5_sum">5 000.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n4_6_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n4_6_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n4_6_sum">-241.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n4_7_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n4_7_sub">⊗ Ви заборонили такі оплати....</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n4_7_sum">-241.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n3">3 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n3_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_n3_1_sub">⊗ Недостатньо коштів на картці</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n3_1_sum">-59.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_n1">1 листопада</div>
+      <div class="tx-item">
+        <div class="tx-icon dark"></div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_n1_1_title">Apple</div>
+          <div class="tx-sub error editable" data-key="st_n1_1_sub">⊗ Ви заборонили такі оплати....</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_n1_1_sum">-91.24 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o31">31 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon red">⇄</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o31_1_title">Нова пошта</div></div>
+        <div class="tx-amount spent editable" data-key="st_o31_1_sum">-1 340.00 ₴</div>
+      </div>
+      
+      <div class="tx-item">
+        <div class="tx-icon red">⇄</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o31_3_title">Нова пошта</div></div>
+        <div class="tx-amount spent editable" data-key="st_o31_3_sum">-92.75 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o30">30 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o30_1_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_o30_1_sum">-113.59 ₴</div>
+      </div>
+      
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o30_3_title">Від: Olha Holovchytska</div></div>
+        <div class="tx-amount positive editable" data-key="st_o30_3_sum">1 300.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">🏙️</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o30_4_title">City24</div></div>
+        <div class="tx-amount positive editable" data-key="st_o30_4_sum">600.00 ₴</div>
+      </div>
+
+
+      <div class="date-divider editable" data-key="date_o29">29 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_o29_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_o29_1_sub">⊗ Недостатньо коштів на картці</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_o29_1_sum">-59.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o29_2_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_o29_2_sum">-204.67 ₴</div>
+      </div>
+      
+      <div class="tx-item">
+        <div class="tx-icon dark">🛒</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o29_4_title">MagazinSadiba</div></div>
+        <div class="tx-amount spent editable" data-key="st_o29_4_sum">-105.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o27">27 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o27_1_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_o27_1_sum">-102.33 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o26">26 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o26_1_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_o26_1_sum">-204.67 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o26_2_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_o26_2_sum">-102.33 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o25">25 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_o25_1_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_o25_1_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_o25_1_sum">-129.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o24">24 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o24_1_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_o24_1_sum">-307.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o23">23 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">💳</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o23_1_title">414949****2689</div></div>
+        <div class="tx-amount spent editable" data-key="st_o23_1_sum">-402.01 ₴</div>
+      </div>
+      
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o23_3_title">Від: Holovchyts`ka Ol`ha</div></div>
+        <div class="tx-amount positive editable" data-key="st_o23_3_sum">400.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o22">22 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon green-muted">◔</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o22_1_title">Щомісячний платіж</div></div>
+        <div class="tx-amount spent editable" data-key="st_o22_1_sum">-58.23 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o21">21 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">👤</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o21_1_title">Головчицький Ігор Олександрович</div></div>
+        <div class="tx-amount spent editable" data-key="st_o21_1_sum">-7 150.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o21_2_title">Часткове зняття банки «на шось»</div></div>
+        <div class="tx-amount positive editable" data-key="st_o21_2_sum">400.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o21_3_title">Від: Holovchytska Olha</div></div>
+        <div class="tx-amount positive editable" data-key="st_o21_3_sum">6 800.00 ₴</div>
+      </div>
+
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o21_5_title">Sweet TV</div></div>
+        <div class="tx-amount spent editable" data-key="st_o21_5_sum">-299.00 ₴</div>
+      </div>
+
+      <div class="date-divider editable" data-key="date_o20">20 жовтня</div>
+      <div class="tx-item">
+        <div class="tx-icon dark">↓</div>
+        <div class="tx-info"><div class="tx-title editable" data-key="st_o20_1_title">Від: Luschan Pavlo</div></div>
+        <div class="tx-amount positive editable" data-key="st_o20_1_sum">2 000.00 ₴</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon cyan">▶</div>
+        <div class="tx-info">
+          <div class="tx-title editable" data-key="st_o20_2_title">Sweet TV</div>
+          <div class="tx-sub error editable" data-key="st_o20_2_sub">⊗ Недостатньо коштів на кар...</div>
+        </div>
+        <div class="tx-amount failed editable" data-key="st_o20_2_sum">-299.00 ₴</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 2: КРЕДИТИ -->
+  <div id="tab-credits" class="screen">
+    <div class="header-gradient green-dark">
+      <h1 class="page-title">Доступні ліміти</h1>
+      <div class="limits-grid">
+        <div class="limit-card">
+          <div class="limit-icons">
+            <span class="badge-green">◔</span>
+            <span class="badge-purple">🐾</span>
+          </div>
+          <div class="limit-name">Розстрочка і<br>Покупка Частинами</div>
+          <div class="limit-val editable" data-key="limit_installment">11080 ₴</div>
+        </div>
+        <div class="limit-card">
+          <div class="limit-icons">
+            <span class="badge-orange">📅</span>
+          </div>
+          <div class="limit-name">Кредит<br>готівкою</div>
+          <div class="limit-val editable" data-key="limit_cash">20000 ₴</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-body">
+      <div class="section-header">
+        <h2>Розстрочка на картку</h2>
+        <span class="red-link" onclick="openInstallmentsAll()">Див. усі</span>
+      </div>
+
+      <div class="credit-item" onclick="openInstallmentDetail('cr1')">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row">
+            <span class="credit-title">Розстрочка на картку</span>
+            <span class="credit-total editable" data-key="cr1_total">1 000 ₴</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 35%;"></div></div>
+          <div class="credit-sub editable" data-key="cr1_sub">Платіж 26 листопада на 102.33 ₴</div>
+        </div>
+      </div>
+
+      <div class="credit-item" onclick="openInstallmentDetail('cr2')">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row">
+            <span class="credit-title">Розстрочка на картку</span>
+            <span class="credit-total editable" data-key="cr2_total">2 000 ₴</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 25%;"></div></div>
+          <div class="credit-sub editable" data-key="cr2_sub">Платіж 26 листопада на 204.67 ₴</div>
+        </div>
+      </div>
+
+      <div class="credit-item" onclick="openInstallmentDetail('cr3')">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row">
+            <span class="credit-title">Розстрочка на картку</span>
+            <span class="credit-total editable" data-key="cr3_total">1 000 ₴</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 20%;"></div></div>
+          <div class="credit-sub editable" data-key="cr3_sub">Платіж 27 листопада на 102.33 ₴</div>
+        </div>
+      </div>
+
+      <div class="archive-btn-wrap">
+        <button class="archive-btn">🗄️ Архів</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ДЕТАЛЬНИЙ ЕКРАН РОЗСТРОЧКИ -->
+  <div id="screen-installment-detail" class="sub-screen">
+    <div class="header-gradient green-dark pb-16">
+      <div class="sub-top-bar">
+        <button class="close-btn" onclick="closeSubScreen('screen-installment-detail')">←</button>
+        <div class="top-mini-badge">◔</div>
+      </div>
+      <div class="detail-center-title">Розстрочка на картку</div>
+      <div class="detail-big-sum editable" data-key="cr1_total">1 000 ₴</div>
+
+      <div class="donut-wrap">
+        <div class="donut-ring">
+          <div class="donut-inner">
+            <div class="donut-icon">▭</div>
+            <div class="donut-paid editable" data-key="inst_paid">409.32 ₴</div>
+            <div class="donut-label">Виплачено</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="remaining-text editable" data-key="inst_rem">Залишилось 8 платежів на 818.68 ₴</div>
+    </div>
+
+    <div class="content-body">
+      <div class="schedule-row done">
+        <span class="sch-check">✓</span>
+        <div class="sch-info">
+          <div class="sch-date editable" data-key="sch1_date">26 жовтня</div>
+          <div class="sch-note">Щомісячний платіж</div>
+        </div>
+        <div class="sch-sum editable" data-key="sch1_sum">102.33 ₴</div>
+      </div>
+
+      <div class="schedule-row">
+        <span class="sch-circle"></span>
+        <div class="sch-info">
+          <div class="sch-date editable" data-key="sch2_date">26 листопада</div>
+          <div class="sch-note">Доступно з 27 листопада</div>
+        </div>
+        <button class="pay-pill-btn">Сплатити <span class="editable" data-key="sch2_sum">102.33 ₴</span></button>
+      </div>
+
+      <div class="schedule-row">
+        <span class="sch-circle"></span>
+        <div class="sch-info">
+          <div class="sch-date editable" data-key="sch3_date">26 грудня</div>
+        </div>
+        <div class="sch-sum editable" data-key="sch3_sum">102.33 ₴</div>
+      </div>
+
+      <div class="schedule-row">
+        <span class="sch-circle"></span>
+        <div class="sch-info">
+          <div class="sch-date editable" data-key="sch4_date">26 січня 2027</div>
+        </div>
+        <div class="sch-sum editable" data-key="sch4_sum">102.33 ₴</div>
+      </div>
+
+      <div class="show-all-link editable" data-key="inst_show_all">Показати всі</div>
+      <div class="last-pay-note editable" data-key="inst_last_pay">Останній платіж 26 червня 2027</div>
+    </div>
+  </div>
+
+  <!-- СПИСОК "ДИВ. УСІ" РОЗСТРОЧКИ -->
+  <div id="screen-installments-all" class="sub-screen">
+    <div class="sub-header-bar">
+      <button class="close-btn" onclick="closeSubScreen('screen-installments-all')">←</button>
+      <span class="sub-header-title">Розстрочка і Покупка Частинами</span>
+    </div>
+    <div class="content-body">
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr1">1 000.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 40%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr1_sub">Платіж 27 листопада на 102.33 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr2">2 000.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 30%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr2_sub">Платіж 29 листопада на 204.67 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr3">1 110.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 50%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr3_sub">Платіж 30 листопада на 113.59 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr4">350.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr4_sub">Платіж 7 грудня на 35.82 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr5">100.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr5_sub">Платіж 8 грудня на 10.23 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr6">400.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 35%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr6_sub">Платіж 12 грудня на 40.93 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr7">2 000.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 25%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr7_sub">Платіж 16 грудня на 204.67 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr8">569.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 55%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr8_sub">Платіж 22 грудня на 58.23 ₴</div>
+        </div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-icon green">◔</div>
+        <div class="credit-details">
+          <div class="credit-row"><span>Розстрочка на картку</span><span class="editable" data-key="all_cr9">3 000.00 ₴</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 30%;"></div></div>
+          <div class="credit-sub editable" data-key="all_cr9_sub">Платіж 24 грудня на 307.00 ₴</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 3: НАКОПИЧЕННЯ -->
+  <div id="tab-savings" class="screen">
+    <div class="header-gradient blue-bright">
+      <div class="savings-top">
+        <span>Накопичення в гривнях</span>
+        <span class="info-circle">i</span>
+      </div>
+      <div class="savings-balance editable" data-key="savings_total">500.00 ₴</div>
+
+      <div class="savings-scroll">
+        <div class="sav-card">
+          <div class="sav-icon blue">10</div>
+          <span>Відкрити<br>депозит</span>
+        </div>
+        <div class="sav-card">
+          <div class="sav-icon pink">🫙</div>
+          <span>Відкрити<br>Банку</span>
+        </div>
+        <div class="sav-card">
+          <div class="sav-icon flag">🇺🇦</div>
+          <span>Купити<br>облігації</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-body">
+      <h2>Банки</h2>
+      <div class="sub-balance editable" data-key="jars_sub">У гривні 500.00 ₴</div>
+
+      <div class="jar-item">
+        <div class="jar-avatar">a</div>
+        <div class="jar-info">
+          <div class="jar-name editable" data-key="jar_name">на шось</div>
+          <div class="jar-saved editable" data-key="jar_saved">Накопичено 500.00 ₴</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 4: ЩЕ -->
+  <div id="tab-more" class="screen">
+    <div class="content-body pt-safe">
+      <h1 class="page-title left">Ще</h1>
+
+      <div class="top-tiles-3">
+        <div class="tile-3"><div class="tile-3-ico">🎁</div><span>Запросити<br>друга</span></div>
+        <div class="tile-3"><div class="tile-3-ico">💬</div><span>Служба<br>підтримки</span></div>
+        <div class="tile-3"><div class="tile-3-ico">📷</div><span>Сканер<br>QR-коду</span></div>
+      </div>
+
+      <div class="menu-group mt-16">
+        <div class="menu-row">
+          <span class="menu-ico purple-bg">🛡️</span>
+          <div class="menu-texts">
+            <div class="menu-title">Автострахування</div>
+            <div class="menu-sub">ОСЦПВ та Зелена картка</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico blue-bg">📱</span>
+          <div class="menu-texts">
+            <div class="menu-title">Мобільний зв'язок</div>
+            <div class="menu-sub">eSIM та керування номерами</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico green-bg">⛽</span>
+          <div class="menu-texts">
+            <div class="menu-title">Заправка на WOG</div>
+            <div class="menu-sub">Не виходячи з авто</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico pink-bg">%</span>
+          <div class="menu-texts">
+            <div class="menu-title">Програми лояльності</div>
+            <div class="menu-sub">Накопичення бонусів</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico orange-bg">💵</span>
+          <div class="menu-texts">
+            <div class="menu-title">Замовлення готівки</div>
+            <div class="menu-sub">Зняття у касі банку-партнера</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-group mt-16">
+        <div class="menu-row">
+          <span class="menu-ico blue-bg">🛡️</span>
+          <div class="menu-texts">
+            <div class="menu-title">Про безпеку в mono</div>
+            <div class="menu-sub">Запобігання шахрайству</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico orange-bg">✒️</span>
+          <div class="menu-texts">
+            <div class="menu-title">monoКЕП</div>
+            <div class="menu-sub">Ваш електронний підпис</div>
+          </div>
+        </div>
+        <div class="menu-row">
+          <span class="menu-ico">🏦</span>
+          <div class="menu-texts">
+            <div class="menu-title">Open Banking</div>
+            <div class="menu-sub">Доступ іншим банкам до рахунків</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="reset-btn" onclick="resetData()">Скинути всі змінені дані</button>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 5: МАРКЕТ -->
+  <div id="tab-market" class="screen">
+    <div class="content-body pt-safe">
+      <h1 class="page-title left">market by mono</h1>
+      <div class="market-banner">
+        <h3>Black Friday на маркеті</h3>
+        <p>Покупка частинами без переплат на тисячі товарів</p>
+      </div>
+      <div class="more-grid">
+        <div class="more-card"><span>📱</span> Смартфони</div>
+        <div class="more-card"><span>💻</span> Ноутбуки</div>
+        <div class="more-card"><span>🎧</span> Навушники</div>
+        <div class="more-card"><span>☕</span> Для дому</div>
+      </div>
+    </div>
+  </div>
+<!-- ДЕТАЛІ ОПЕРАЦІЇ -->
+  <div id="screen-tx-detail" class="sub-screen tx-detail-screen">
+    <div class="tx-detail-banner" id="tx-detail-banner">
+      <div class="tx-detail-top">
+        <button class="close-btn" onclick="closeSubScreen('screen-tx-detail')">←</button>
+        <span class="tx-fav-star" id="tx-detail-star" onclick="toggleTxStar()">☆</span>
+      </div>
+      <div class="tx-detail-avatar-wrap">
+        <div class="tx-detail-avatar" id="tx-detail-avatar">↓</div>
+      </div>
+    </div>
+
+    <div class="tx-detail-sheet">
+      <div class="tx-detail-counterparty" id="tx-detail-title">Від: Kolosovskiy Nazar</div>
+      <div class="tx-detail-pill-row">
+        <span class="tx-detail-category-pill" id="tx-detail-category">Поповнення картки</span>
+        <span class="tx-detail-status-badge" id="tx-detail-status"></span>
+      </div>
+      <div class="tx-detail-datetime" id="tx-detail-date">25 листопада 2026, 14:20</div>
+      <div class="tx-detail-amount" id="tx-detail-amount">500.00 ₴</div>
+
+      <div class="tx-detail-card">
+        <div class="tx-detail-row" onclick="openReceipt()">
+          <span class="tx-detail-row-ico">🧾</span>
+          <div class="tx-detail-row-text">
+            <div class="tx-detail-row-title">Переглянути квитанцію</div>
+            <div class="tx-detail-row-sub" id="tx-detail-receipt-sub">Офіційна квитанція операції</div>
+          </div>
+          <span class="tx-detail-chevron">›</span>
+        </div>
+        <div class="tx-detail-row" onclick="openReceipt()">
+          <span class="tx-detail-row-ico">📄</span>
+          <div class="tx-detail-row-text">
+            <div class="tx-detail-row-title">Переглянути PDF-квитанцію</div>
+            <div class="tx-detail-row-sub">Документ для друку та збереження</div>
+          </div>
+          <span class="tx-detail-chevron">›</span>
+        </div>
+      </div>
+
+      <div class="tx-detail-card">
+        <div class="tx-detail-row">
+          <span class="tx-detail-row-ico">📝</span>
+          <div class="tx-detail-row-text">
+            <div class="tx-detail-row-title" id="tx-detail-note-title">Опис та #теги</div>
+            <div class="tx-detail-row-sub" id="tx-detail-note-sub">Додати коментар</div>
+          </div>
+        </div>
+        <div class="tx-detail-row">
+          <span class="tx-detail-row-ico">📎</span>
+          <div class="tx-detail-row-text">
+            <div class="tx-detail-row-title">Завантажити файл</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tx-detail-card">
+        <div class="tx-detail-balance-box">
+          <div class="tx-detail-balance-label">Залишок після операції</div>
+          <div class="tx-detail-balance-val editable" data-key="main_balance">15.36 ₴</div>
+        </div>
+      </div>
+
+      <div class="tx-detail-actions-list">
+        <div class="tx-detail-action-item" onclick="openReceipt()">
+          <span class="tx-detail-action-ico">↗</span>
+          <span>Поділитись квитанцією</span>
+        </div>
+        <div class="tx-detail-action-item" onclick="closeSubScreen('screen-tx-detail')">
+          <span class="tx-detail-action-ico">↺</span>
+          <span>Повторити платіж</span>
+        </div>
+        <div class="tx-detail-action-item" onclick="closeSubScreen('screen-tx-detail')">
+          <span class="tx-detail-action-ico">?</span>
+          <span>Поставити запитання</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- КВИТАНЦІЯ ОПЕРАЦІЇ -->
+  <div id="screen-receipt" class="sub-screen receipt-screen">
+    <div class="receipt-topbar">
+      <button class="close-btn" onclick="closeSubScreen('screen-receipt')">←</button>
+      <span class="receipt-topbar-title">Квитанція</span>
+      <span class="receipt-topbar-spacer"></span>
+    </div>
+
+    <div class="receipt-paper-wrap">
+      <div class="receipt-paper" id="receipt-paper">
+        <div class="receipt-head">
+          <div>
+            <div class="receipt-bank-logo">monobank</div>
+            <div class="receipt-bank-sub">Universal Bank</div>
+          </div>
+          <div class="receipt-bank-meta">
+            <div>АТ «УНІВЕРСАЛ БАНК»</div>
+            <div>Телефон: 0 800 205 205</div>
+            <div>Адреса: 04082, м. Київ, вул. Автозаводська, 54/19</div>
+            <div>Ліцензія НБУ №92 від 20.01.1994 р.</div>
+          </div>
+        </div>
+
+        <div class="receipt-doc-title" id="rcp-doc-title">Квитанція № ET31-0MM9-1CE1-0BEA від 23.10.2026</div>
+
+        <div class="receipt-section-title">Відправник</div>
+        <div class="receipt-kv"><span>Ім'я</span><strong id="rcp-sender-name">Лущан Зоряна Павлівна</strong></div>
+        <div class="receipt-kv"><span>Банк</span><strong id="rcp-sender-bank">Універсал Банк</strong></div>
+        <div class="receipt-kv"><span>Код банку</span><strong>322001</strong></div>
+        <div class="receipt-kv"><span>Платіжна система</span><strong>VISA</strong></div>
+        <div class="receipt-kv"><span>Платіжний інструмент</span><strong id="rcp-sender-tool">4441 **** **** 8217</strong></div>
+
+        <div class="receipt-section-title">Одержувач</div>
+        <div class="receipt-kv"><span>Одержувач / Сервіс</span><strong id="rcp-receiver-name">Отримувач</strong></div>
+        <div class="receipt-kv"><span>Банк одержувача</span><strong id="rcp-receiver-bank">Універсал Банк</strong></div>
+        <div class="receipt-kv"><span>Платіжний інструмент</span><strong id="rcp-receiver-tool">414949******2689</strong></div>
+
+        <div class="receipt-section-title">Деталі транзакції</div>
+        <div class="receipt-kv"><span>Статус</span><strong id="rcp-status">Успішно</strong></div>
+        <div class="receipt-kv"><span>Сума (грн)</span><strong id="rcp-amount">402.01</strong></div>
+        <div class="receipt-kv"><span>Комісія (грн)</span><strong>0.00</strong></div>
+        <div class="receipt-kv"><span>Сума літерами</span><strong id="rcp-amount-words">чотириста дві гривні 01 копійка</strong></div>
+        <div class="receipt-kv"><span>Код авторизації</span><strong id="rcp-auth-code">200821</strong></div>
+        <div class="receipt-kv"><span>Призначення платежу</span><strong id="rcp-purpose">Переказ особистих коштів</strong></div>
+        <div class="receipt-kv"><span>Дата і час операції</span><strong id="rcp-datetime">23.10.2026 11:34</strong></div>
+
+        <div class="receipt-footer">
+          <div class="receipt-sign-block">
+            <div class="receipt-director">Операційний директор<br>Примаченко Т.В.</div>
+            <div class="receipt-qr-box">
+              <div class="receipt-qr">▦</div>
+              <div>Отримайте картку monobank за QR-кодом та від 100 грн на рахунок кешбеку</div>
+            </div>
+          </div>
+          <div class="receipt-stamp">
+            <div class="receipt-stamp-circle">
+              <span>monobank</span>
+              <small>Universal Bank</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="receipt-bottom-bar">
+      <button class="receipt-share-btn" onclick="shareReceipt()">Поділитись квитанцією</button>
+    </div>
+  </div>
+  <!-- НИЖНЯ НАВІГАЦІЯ -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <div class="nav-pill">
+      <button class="nav-item active" onclick="switchTab('cards', this)">
+        <span class="nav-icon">💳</span>
+        <span class="nav-label">Картки</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('credits', this)">
+        <span class="nav-icon">◔</span>
+        <span class="nav-label">Кредити</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('savings', this)">
+        <span class="nav-icon">🫙</span>
+        <span class="nav-label">Накопичення</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('more', this)">
+        <span class="nav-icon">⠿</span>
+        <span class="nav-label">Ще</span>
+      </button>
+    </div>
+    <button class="nav-market" onclick="switchTab('market', this)">
+      <span class="nav-icon">🛍️</span>
+      <span class="nav-label">Маркет</span>
+    </button>
+  </nav>
+  <script>
+    // Анімація запуску (m -> Face ID -> monobank -> головний екран)
+    let splashFinished = false;
+    function finishSplash() {
+      if (splashFinished) return;
+      splashFinished = true;
+      const splash = document.getElementById('splash-screen');
+      splash.style.opacity = '0';
+      setTimeout(() => splash.remove(), 250);
+    }
+
+    setTimeout(() => {
+      if (splashFinished) return;
+      document.getElementById('splash-step-1').classList.remove('active');
+      document.getElementById('splash-step-2').classList.add('active');
+    }, 650);
+
+    setTimeout(() => {
+      if (splashFinished) return;
+      document.getElementById('splash-step-2').classList.remove('active');
+      document.getElementById('splash-step-3').classList.add('active');
+    }, 1450);
+
+    setTimeout(() => finishSplash(), 2200);
+
+    // Перемикання вкладок
+    function switchTab(tabName, el) {
+      document.querySelectorAll('.sub-screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+
+      document.querySelectorAll('.nav-item, .nav-market').forEach(btn => btn.classList.remove('active'));
+      if (el) el.classList.add('active');
+      document.getElementById('bottom-nav').style.display = 'flex';
+      window.scrollTo(0, 0);
+    }
+
+    function openSubScreen(id) {
+      document.getElementById(id).classList.add('active');
+      document.getElementById('bottom-nav').style.display = 'none';
+      window.scrollTo(0, 0);
+    }
+
+    function closeSubScreen(id) {
+      document.getElementById(id).classList.remove('active');
+      document.getElementById('bottom-nav').style.display = 'flex';
+    }
+
+    function openCardModal() { openSubScreen('modal-card'); }
+    function openStatement() { openSubScreen('screen-statement'); }
+    function openInstallmentDetail() { openSubScreen('screen-installment-detail'); }
+    function openInstallmentsAll() { openSubScreen('screen-installments-all'); }
+
+    // Редагування будь-яких значень + localStorage
+    document.querySelectorAll('.editable').forEach(el => {
+      const key = el.getAttribute('data-key');
+      const savedValue = localStorage.getItem('mono_' + key);
+      if (savedValue !== null) {
+        el.textContent = savedValue;
+      }
+
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        el.setAttribute('contenteditable', 'true');
+        el.focus();
+      });
+
+      el.addEventListener('blur', () => {
+        el.removeAttribute('contenteditable');
+        const newVal = el.textContent.trim();
+        localStorage.setItem('mono_' + key, newVal);
+        document.querySelectorAll(`.editable[data-key="${key}"]`).forEach(mirror => {
+          mirror.textContent = newVal;
+        });
+      });
+
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          el.blur();
+        }
+      });
+    });
+
+    function resetData() {
+      if (confirm('Повернути всі стандартні цифри та назви?')) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+    // Деталі операції та динамічна квитанція
+    let currentTxData = null;
+
+    const MONTH_GENITIVE = {
+      'січня': '01', 'лютого': '02', 'березня': '03', 'квітня': '04',
+      'травня': '05', 'червня': '06', 'липня': '07', 'серпня': '08',
+      'вересня': '09', 'жовтня': '10', 'листопада': '11', 'грудня': '12'
+    };
+
+    const ONES = ['', 'одна', 'дві', 'три', 'чотири', 'п\'ять', 'шість', 'сім', 'вісім', 'дев\'ять'];
+    const ONES_MASC = ['', 'один', 'два', 'три', 'чотири', 'п\'ять', 'шість', 'сім', 'вісім', 'дев\'ять'];
+    const TEENS = ['десять', 'одинадцять', 'дванадцять', 'тринадцять', 'чотирнадцять', 'п\'ятнадцять', 'шістнадцять', 'сімнадцять', 'вісімнадцять', 'дев\'ятнадцять'];
+    const TENS = ['', '', 'двадцять', 'тридцять', 'сорок', 'п\'ятдесят', 'шістдесят', 'сімдесят', 'вісімдесят', 'дев\'яносто'];
+    const HUNDREDS = ['', 'сто', 'двісті', 'триста', 'чотириста', 'п\'ятсот', 'шістсот', 'сімсот', 'вісімсот', 'дев\'ятсот'];
+
+    function pluralUa(n, one, few, many) {
+      const m100 = n % 100;
+      if (m100 >= 11 && m100 <= 14) return many;
+      const m10 = n % 10;
+      if (m10 === 1) return one;
+      if (m10 >= 2 && m10 <= 4) return few;
+      return many;
+    }
+
+    function chunkToWords(num, feminine) {
+      let res = [];
+      const h = Math.floor(num / 100);
+      const t = Math.floor((num % 100) / 10);
+      const o = num % 10;
+      if (h > 0) res.push(HUNDREDS[h]);
+      if (t === 1) {
+        res.push(TEENS[o]);
+      } else {
+        if (t > 1) res.push(TENS[t]);
+        if (o > 0) res.push(feminine ? ONES[o] : ONES_MASC[o]);
+      }
+      return res.join(' ');
+    }
+
+    function amountToWords(rawAmount) {
+      const cleaned = String(rawAmount || '0').replace(/[^\d.,]/g, '').replace(',', '.');
+      const val = parseFloat(cleaned);
+      if (Number.isNaN(val)) return 'нуль гривень 00 копійок';
+      const totalKop = Math.round(val * 100);
+      const hryvnia = Math.floor(totalKop / 100);
+      const kop = totalKop % 100;
+
+      let parts = [];
+      if (hryvnia === 0) {
+        parts.push('нуль');
+      } else {
+        const thousands = Math.floor(hryvnia / 1000);
+        const rest = hryvnia % 1000;
+        if (thousands > 0) {
+          parts.push(chunkToWords(thousands, true));
+          parts.push(pluralUa(thousands, 'тисяча', 'тисячі', 'тисяч'));
+        }
+        if (rest > 0) {
+          parts.push(chunkToWords(rest, true));
+        }
+      }
+      parts.push(pluralUa(hryvnia, 'гривня', 'гривні', 'гривень'));
+      const kopStr = String(kop).padStart(2, '0');
+      parts.push(`${kopStr} ${pluralUa(kop, 'копійка', 'копійки', 'копійок')}`);
+      return parts.join(' ');
+    }
+
+    function findDateLabelForTx(txEl) {
+      const body = txEl.closest('.statement-body');
+      if (!body) return '25 листопада';
+      let prev = txEl.previousElementSibling;
+      while (prev) {
+        if (prev.classList && prev.classList.contains('date-divider')) {
+          return prev.textContent.trim();
+        }
+        prev = prev.previousElementSibling;
+      }
+      return '25 листопада';
+    }
+
+    function formatNumericDate(dateLabel) {
+      const lower = String(dateLabel || '').toLowerCase();
+      if (lower === 'вчора') return '25.11.2026';
+      if (lower === 'сьогодні') return '26.11.2026';
+      const match = lower.match(/(\d{1,2})\s+([а-яіїєґ']+)/i);
+      if (match) {
+        const day = String(match[1]).padStart(2, '0');
+        const month = MONTH_GENITIVE[match[2]] || '11';
+        return `${day}.${month}.2026`;
+      }
+      return '23.10.2026';
+    }
+
+    function buildDocNumber(title, amount, dateStr) {
+      const base = `${title}|${amount}|${dateStr}`;
+      let hash = 0;
+      for (let i = 0; i < base.length; i++) {
+        hash = ((hash << 5) - hash) + base.charCodeAt(i);
+        hash |= 0;
+      }
+      const code = Math.abs(hash).toString(36).toUpperCase().padStart(6, '0').slice(0, 6);
+      return `Квитанція № ET31-${code.slice(0, 3)}-${code.slice(3, 6)}-0BEA від ${dateStr}`;
+    }
+
+    function openTxDetail(txEl) {
+      const titleEl = txEl.querySelector('.tx-title');
+      const amountEl = txEl.querySelector('.tx-amount');
+      const subEl = txEl.querySelector('.tx-sub');
+      const iconEl = txEl.querySelector('.tx-icon');
+
+      const title = titleEl ? titleEl.textContent.trim() : 'Операція';
+      const amountText = amountEl ? amountEl.textContent.trim() : '0.00 ₴';
+      const subText = subEl ? subEl.textContent.trim() : '';
+      const iconText = iconEl ? iconEl.textContent.trim() : '↓';
+      const isPositive = amountEl ? amountEl.classList.contains('positive') : false;
+      const isFailed = Boolean(subText) || (amountEl ? amountEl.classList.contains('failed') : false);
+
+      const dateLabel = findDateLabelForTx(txEl);
+      const numericDate = formatNumericDate(dateLabel);
+      const timeStr = '14:20';
+
+      let category = 'Переказ на картку';
+      let purpose = 'Переказ особистих коштів';
+      if (isPositive && /^Від:/i.test(title)) {
+        category = 'Поповнення картки';
+        purpose = 'Переказ коштів на картку';
+      } else if (isPositive) {
+        category = 'Зарахування коштів';
+        purpose = `Зарахування (${title})`;
+      } else if (/sweet tv/i.test(title)) {
+        category = 'Розваги та медіа';
+        purpose = 'Оплата підписки Sweet TV';
+      } else if (/нова пошта/i.test(title)) {
+        category = 'Доставка';
+        purpose = 'Оплата послуг доставки Нова пошта';
+      } else if (/щомісячний платіж/i.test(title)) {
+        category = 'Розстрочка';
+        purpose = 'Щомісячний платіж за розстрочкою';
+      } else if (/банки|банку/i.test(title)) {
+        category = 'Накопичення';
+        purpose = title;
+      }
+
+      currentTxData = {
+        title,
+        amountText,
+        subText,
+        iconText,
+        isPositive,
+        isFailed,
+        dateLabel,
+        numericDate,
+        fullDate: `${dateLabel} 2026, ${timeStr}`,
+        receiptDateTime: `${numericDate} ${timeStr}`,
+        category,
+        purpose
+      };
+
+      const banner = document.getElementById('tx-detail-banner');
+      banner.classList.remove('incoming', 'failed');
+      if (isFailed) banner.classList.add('failed');
+      else if (isPositive) banner.classList.add('incoming');
+
+      document.getElementById('tx-detail-avatar').textContent = iconText;
+      document.getElementById('tx-detail-title').textContent = title;
+      document.getElementById('tx-detail-category').textContent = category;
+
+      const statusBadge = document.getElementById('tx-detail-status');
+      if (isFailed) {
+        statusBadge.textContent = subText.replace(/^⊗\s*/, '') || 'Операція не пройшла';
+        statusBadge.className = 'tx-detail-status-badge error';
+      } else if (isPositive) {
+        statusBadge.textContent = 'Зараховано';
+        statusBadge.className = 'tx-detail-status-badge success';
+      } else {
+        statusBadge.textContent = 'Виконано';
+        statusBadge.className = 'tx-detail-status-badge neutral';
+      }
+
+      document.getElementById('tx-detail-date').textContent = currentTxData.fullDate;
+
+      const amountBox = document.getElementById('tx-detail-amount');
+      amountBox.textContent = amountText;
+      amountBox.className = 'tx-detail-amount ' + (isFailed ? 'failed' : (isPositive ? 'positive' : 'spent'));
+
+      document.getElementById('tx-detail-receipt-sub').textContent = isFailed
+        ? 'Квитанція про спробу списання'
+        : 'Офіційна квитанція операції';
+
+      openSubScreen('screen-tx-detail');
+    }
+
+    function openReceipt() {
+      if (!currentTxData) return;
+      const d = currentTxData;
+      const cardNum = (document.querySelector('[data-key="card_num"]') || {}).textContent || '4441 **** **** 8217';
+      const holder = 'Лущан Зоряна Павлівна';
+
+      document.getElementById('rcp-doc-title').textContent = buildDocNumber(d.title, d.amountText, d.numericDate);
+
+      if (d.isPositive) {
+        document.getElementById('rcp-sender-name').textContent = d.title.replace(/^Від:\s*/i, '');
+        document.getElementById('rcp-sender-bank').textContent = 'Банк відправника';
+        document.getElementById('rcp-sender-tool').textContent = '537541******1904';
+        document.getElementById('rcp-receiver-name').textContent = holder;
+        document.getElementById('rcp-receiver-bank').textContent = 'Універсал Банк';
+        document.getElementById('rcp-receiver-tool').textContent = cardNum;
+      } else {
+        document.getElementById('rcp-sender-name').textContent = holder;
+        document.getElementById('rcp-sender-bank').textContent = 'Універсал Банк';
+        document.getElementById('rcp-sender-tool').textContent = cardNum;
+        document.getElementById('rcp-receiver-name').textContent = d.title;
+        document.getElementById('rcp-receiver-bank').textContent = /банк|приват/i.test(d.title) ? d.title : 'Універсал Банк';
+        document.getElementById('rcp-receiver-tool').textContent = /^\d{6}\*+\d{4}$/.test(d.title) ? d.title : '414949******2689';
+      }
+
+      document.getElementById('rcp-status').textContent = d.isFailed
+        ? (d.subText.replace(/^⊗\s*/, '') || 'Не проведено')
+        : 'Успішно';
+
+      const cleanNum = d.amountText.replace(/[^\d\s.,]/g, '').trim();
+      document.getElementById('rcp-amount').textContent = cleanNum;
+      document.getElementById('rcp-amount-words').textContent = amountToWords(cleanNum);
+
+      let authSum = 0;
+      for (let i = 0; i < d.title.length; i++) authSum += d.title.charCodeAt(i) * (i + 3);
+      document.getElementById('rcp-auth-code').textContent = String(100000 + (authSum % 899999));
+      document.getElementById('rcp-purpose').textContent = d.purpose;
+      document.getElementById('rcp-datetime').textContent = d.receiptDateTime;
+
+      openSubScreen('screen-receipt');
+    }
+
+    function toggleTxStar() {
+      const star = document.getElementById('tx-detail-star');
+      star.textContent = star.textContent === '☆' ? '★' : '☆';
+    }
+
+    function shareReceipt() {
+      const title = document.getElementById('rcp-doc-title').textContent;
+      const sum = document.getElementById('rcp-amount').textContent;
+      const text = `${title}\nСума: ${sum} грн`;
+      if (navigator.share) {
+        navigator.share({ title: 'Квитанція monobank', text }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => alert('Дані квитанції скопійовано'));
+      }
+    }
+
+    document.querySelectorAll('.tx-item').forEach(item => {
+      item.style.cursor = 'pointer';
+      item.addEventListener('click', (e) => {
+        if (e.target.closest('.editable[contenteditable="true"]')) return;
+        openTxDetail(item);
+      });
+    });
+  </script>
+</body>
+</html>
